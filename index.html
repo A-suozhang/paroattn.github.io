@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="ViDiT-Q: Efficient and Accurate Quantization of Diffusion
+        Transformers for Image and Video Generation">
+  <meta name="keywords" content="Diffusion Transformer, Quantization, Efficent Deep Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ViDiT-Q: Efficient and Accurate Quantization of Diffusion
+    Transformers for Image and Video Generation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title"> <img src="./static/images/favicon.svg" style="width: 2em" /> ViDiT-Q: Efficient and Accurate Quantization of Diffusion Transformers for Image and Video Generation</h1>
+          <h3 class="title is-4 publication-title">ICLR2025</h3>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TianchenZhao">Tianchen Zhao</a><sup>1,2</sup>,</span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TongchengFang">Tongcheng Fang</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://github.com/jason-huang03">Haofeng Huang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/EnshuLiu">Enshu Liu</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Rui Wan</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Widyadewi Soedarmadji</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/ShiyaoLi">Shiyao Li</a><sup>12</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/zinanlin/">Zinan Lin</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://dai.sjtu.edu.cn/pepledetail.html?id=218">Guohao Dai</a><sup>24</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=SvE3bdUAAAAJ&hl=en">Shengen Yan</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.ee.tsinghua.edu.cn/en/info/1067/1292.htm">Huazhong Yang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/XuefeiNing">Xuefei Ning</a><sup>1&dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/YuWang">Yu Wang</a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Tsinghua University,</span>
+            <span class="author-block"><sup>2</sup>Infinigence AI</span>
+            <span class="author-block"><sup>3</sup>Microsoft</span>
+            <span class="author-block"><sup>4</sup>Shanghai Jiao Tong University</span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>&dagger;</sup><b>Corresponding author</b></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2F429cbac0-9463-4978-941b-c3c8ef5daa01.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2406.02540"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Sides Link. -->
+              <!-- <span class="link-block">
+                <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fa3462020-25d8-436c-993f-7aaf047cbd93.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-alt"></i>
+                  </span>
+                  <span>Slides</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/thu-nics/ViDiT-Q"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+
+  <div class="container is-max-desktop">
+    <!--/ Poster. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Poster</h2>
+        <div class="publication-poster">
+          <img src="./static/src/poster.png"
+            class="poster"
+            lt="Poster."/> -->
+            <!-- <embed src="./static/src/poster.pdf" width="1600px" height="900px" /> -->
+        <!-- </div>
+      </div>
+    </div> 
+    <!--/ Video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-poster">
+          <iframe width="1080" height="720" src="https://www.youtube.com/embed/N_llpMqMJbk?si=C38fAW1gYxCQFtLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
+            <!-- <embed src="./static/src/poster.pdf" width="1600px" height="900px" /> -->
+        <!-- </div>
+      </div>
+    </div> 
+    <!--/ Teaser. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">TL;DR</h2>
+        <div class="content has-text-justified" font-size=2.5em>
+          <p>
+            We introduce <b>ViDiT-Q</b>, a quantization method specialized for <b>diffusion transformers</b>. For popular large-scale models (e.g., open-sora, Latte, Pixart-&alpha;, Pixart-&Sigma;) for the <b>video and image</b> generation task,  ViDiT-Q could achieve <b><font color="#b3280d">W8A8 quantization without metric degradation</font>, and <font color="#b3280d">W4A8 without notable visual quality degradation</font></b>.
+          </p>
+          <img src="./static/src/viditq/teaser/teaser.jpg"
+            class="teaser"
+            lt="Teaser."
+            style="width: 90%"
+          />
+            <!-- <p>🤗 <b> <font color="#f29a26">Open-Source Huggingface Pipeline🤗: </font></b>  We implement efficient INT8 GPU kernel to achieve <b><font color="#b3280d"> actual GPU acceleration (1.45x) and memory savings (2x)</font></b> for W8A8. We will relase the pipeline soon, for test usage, please contect:
+            <a href= "suozhang1998@gmail.com"> suozhang1998@gmail.com</a>
+            </p>
+            <img src="./static/src/demo_mixdq_pipeline.png"
+            class="teaser"
+            lt="Teaser."
+            style="width: 90%" -->
+            <!-- /> --> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <head>
+        <!-- <meta charset="UTF-8"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Video and Image Demos</title>
+        <style>
+            /* 通用样式 */
+            h2 {
+                text-align: center;
+                margin-bottom: 20px;
+                margin-top: 20px; 
+            }
+
+            /* 视频网格样式 */
+          .video-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                justify-items: center;
+                margin-bottom: 40px;
+            }
+
+          .video {
+                width: 100%;
+            }
+
+          .video video {
+                width: 100%;
+                height: auto;
+            }
+
+          .caption {
+                text-align: center;
+                margin-top: 10px;
+                font-weight: bold;
+            }
+
+            /* 图片网格样式 */
+          .image-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                justify-items: center;
+            }
+
+          .image-grid img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+            }
+
+          .image-grid figure {
+                margin: 0;
+            }
+
+          .image-grid figcaption {
+                text-align: center;
+                font-size: 0.9em;
+                color: #333;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+
+    <!-- 视频展示部分 -->
+    <h2 class="title is-3">Generation Quality</h2>
+    <div class="video-grid">
+        <!-- 第一个视频 -->
+        <div class="video">
+            <video autoplay controls muted loop playsinline>
+                <source src="static/src/viditq/teaser/teaser_fp_0.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <!-- 第二个视频 -->
+        <div class="video">
+            <video autoplay controls muted loop playsinline>
+                <source src="static/src/viditq/teaser/teaser_fp_1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="caption"><b>FP16</b></div>
+        </div>
+        <!-- 第三个视频 -->
+        <div class="video">
+            <video autoplay controls muted loop playsinline>
+                <source src="static/src/viditq/teaser/teaser_fp_2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <!-- 第四个视频 -->
+        <div class="video">
+            <video autoplay controls muted loop playsinline>
+                <source src="static/src/viditq/teaser/teaser_viditq_0.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <!-- 第五个视频 -->
+        <div class="video">
+            <video autoplay controls muted loop playsinline>
+                <source src="static/src/viditq/teaser/teaser_viditq_1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="caption"><b>ViDiT-Q W4A8 MP</b></div>
+        </div>
+        <!-- 第六个视频 -->
+        <div class="video">
+            <video autoplay controls muted loop playsinline>
+                <source src="static/src/viditq/teaser/teaser_viditq_2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- 图片展示部分 -->
+    <div class="image-grid">
+        <img src="static/src/viditq/teaser/teaser_fp_0.jpg" alt="Teaser Image 0">
+        <img src="static/src/viditq/teaser/teaser_viditq_0.jpg" alt="Teaser Image 0">
+        <img src="static/src/viditq/teaser/teaser_viditq_int4_0.jpg" alt="Teaser Image 0">
+        <img src="static/src/viditq/teaser/teaser_fp_1.jpg" alt="Teaser Image 0">
+        <img src="static/src/viditq/teaser/teaser_viditq_1.jpg" alt="Teaser Image 0">
+        <img src="static/src/viditq/teaser/teaser_viditq_int4_1.jpg" alt="Teaser Image 0">
+        <figure>
+            <img src="static/src/viditq/teaser/teaser_fp_2.jpg" alt="Teaser Image 0">
+            <figcaption>FP16</figcaption>
+        </figure>
+        <figure>
+            <img src="static/src/viditq/teaser/teaser_viditq_int4_2.jpg" alt="Teaser Image 0">
+            <figcaption>ViDiT-Q W4A8-MP</figcaption>
+        </figure>
+        <figure>
+            <img src="static/src/viditq/teaser/teaser_viditq_int4_2.jpg" alt="Teaser Image 0">
+            <figcaption>ViDiT-Q W4A4-MP</figcaption>
+        </figure>
+    </div>
+
+    <h2 class="title is-3">Hardware Speedup</h2>
+    <p>
+      We implement efficient fused INT8 CUDA kernels (refer to <a href="https://github.com/thu-nics/ViDiT-Q/tree/viditq/kernels">https://github.com/thu-nics/ViDiT-Q/tree/viditq/kernels</a> for more details) for ViDiT-Q to achieve <b>practical hardware resource</b> savings on GPUs. The optimized ViDiT-Q pipeline could achieve <b><font color="#b3280d">2x memory savings</font></b>, and <b><font color="#b3280d">1.6-1.8x latency speedup</font></b> across various GPU platforms. 
+    </p>
+
+    
+
+
+    <img src="./static/src/viditq/teaser/vidtq_hardware_demo.jpg"
+    class="teaser"
+    lt="Teaser."
+    style="width: 90%"
+    />
+
+
+    <br/>
+    <br/>
+
+    
+
+
+
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            <b> Diffusion transformers (DiTs</b>) have demonstrated remarkable performance in visual generation tasks, such as generating realistic images or videos based on textual instructions. However, larger model sizes and multi-frame processing for video
+            generation lead to increased computational and memory costs, posing challenges
+            for practical deployment on edge devices. <b>Post-Training Quantization (PTQ)</b> is
+            an effective method for reducing memory costs and computational complexity.
+          </p>
+          <p>
+            When quantizing diffusion transformers, we find that existing quantization methods face challenges when applied to text-to-image and video tasks. To address
+            these challenges, we begin by <b>systematically analyzing the source of quantization error</b> and conclude with the unique challenges posed by DiT quantization.
+          </p>
+          <p>
+            Accordingly, we design an improved quantization scheme: ViDiT-Q (Video &
+            Image Diffusion Transformer Quantization), tailored specifically for DiT models.
+            We validate the effectiveness of ViDiT-Q across a variety of text-to-image and
+            video models, achieving <b>W8A8 and W4A8</b> with negligible degradation in visual
+            quality and metrics. Additionally, we implement efficient GPU kernels to achieve
+            practical <b>2-2.5x memory saving and a 1.4-1.7x end-to-end latency speedup</b>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="src.mp4"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</section>
+
+
+<section class="section">
+  <!-- Motivation. -->
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Motivation</h2>
+
+        <h3 class="title is-4">Unique Challenge for DiT Quantization: Dynamic Data Variation</h3>
+        <div class="content has-text-justified">
+          <p>
+            We conduct preliminary experiments to delve into the reasons for quantization failure by visualizing the data distribution. We conclude the key unique challenge of DiT quantization lies in the <b>data variation in multiple levels</b>. While existing quantization methods adopt <b>fixed and coarse-grained quantization parameters</b>, which struggle to handle highly variant data. We summarize the data variance in 4 following levels:
+            <ul>
+              <li><b>Token-wise Variance:</b> In DiTs, the activation is composed of visual tokens (spatial and temporal tokens for video generation). Notable difference exists between tokens. </li>
+              <li><b>Condition-wise Variance:</b> For conditional generation, the classifier-free-guidance (CFG) conducts 2 separate forward with and without the control signal. We observe notable difference between the <font color="#b80000">conditional</font> and <font color="#1e5786">unconditional</font> part.  </li>
+              <li><b>Timestep-wise Variance:</b> Diffusion model iterates the model for multiple timesteps. We observe notable variance in activation across timesteps. </li>
+              <li><b>Time Varying Channel-wise Variance:</b> For both weight and activation, we witness significant difference across different channels. Specifically, the activation channel-wise imbalance varies much across timesteps.</li>
+            </ul>
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="static/src/viditq/motivation/viditq_distribution.jpg"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 100%"/>
+        </div>
+
+        <h3 class="title is-4">Unique Challenge for Video Generation: Multi-aspected Evaluation</h3>
+        <div class="content has-text-justified">
+          <p>
+            The video generation should be evaluated from multiple aspects (e.g., the visual quality, the temporal consistency, the text video alignment and so on.). Similarly, quantization have unique effects on these aspects, these influence should be taken into account when designing quantization method. <b>The traditional naive MSE-based quantization error does not sufficiently estimate the quantization's effect on video generation quality</b>. 
+          </p>
+
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/motivation/viditq_motivation_video.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 80%"/>
+          </div>
+        
+        </div>
+
+
+
+        <br/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <!-- Motivation. -->
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Methodology</h2>
+        <p>
+          To address the aforementioned challenges, we design an improved quantization scheme <b>ViDiT-Q</b>, which provides corresponding solutions: (1) Adopt <b>the fine-grained and dynamic quantization parameters</b> to address the token-level, timestep-level, and condition-level variation. (2) <b>Static-Dynamic Channel Balancing</b> technique to address the time varying channel variation. (3) <b>Metric decoupled mixed precision</b> to estimate the quantization's effect on multiple aspects of generation.
+        </p>
+
+        <div class="content has-text-centered">
+          <img src="static/src/viditq/method/viditq_methodology.jpg"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 100%"/>
+        </div>
+
+        <h3 class="title is-5">Dynamic and Fine-grained Quantization Parameters</h3>
+        <div class="content has-text-justified">
+          <p> The choice of quantization parameter is vital for both the algorithm performance and hardware efficiency of quantization. The arising question is <b>"How to properly choose the quantization parameters?"</b> As seen from the figure below (we use the linear layer computation as an example), the criterion for the quantization parameter granularity is that <b>"the elements that are summed together should share quantization parameters"</b>. In which case, the integer multiplication and add could be executed together instead of firstly "dequant" back to FP to perform aggregation. 
+          </p>
+
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/method/viditq_quant_gemm.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 80%"/>
+          </div>
+
+          <p>
+            The primary distinction between the DiT and previous U-Net-based models are the feature extraction operator (Convolution vs. Linear). U-Net employs convolution layers that conducts local aggregation of neighboring pixel featrues, therefore, the activation should share the same quantization parameters (<b>tensor-wise quantization parameter</b>). However, For DiTs's linear layers, the computation for each visual token is independent. Therefore, for activation of linear layers, the fine-grained <b>token-wise quantization parameter</b> is applicable. 
+          </p>
+
+          <p>
+            Also, for the simple minmax quantization scheme, the estimation of quantization parameters only involves measuring the minimum and maximum value of certain data, which only involves negligible overhead. We also demonstrate as below, using dynamic quantization parameters achieves similar hardware efficiency compared with the static ones (1.71x vs. 1.74x). Meanwhile, adopting <b>dynamic quantization parameters</b> could naturally resolves the dynamic data variation problem, which significantly improves the algorithm performance. 
+          </p>
+
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/method/viditq_finegrained_dynamic.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 100%"/>
+          </div>
+
+        <h3 class="title is-5">Static Dynamic Channel Balancing</h3>
+        <div class="content has-text-justified">
+          <p>
+            The channel balancing problem is also witnessed in prior large language model (LLMs), and a series of existing research explores unique quantization techniques to address the channel imbalance. Among them, the "scaling-based" (e.g., SmoothQuant, AWQ) and "rotation-based" (e.g., QuaRot) methods are two effective ways. For DiT models, the channel imbalance issue has a unique "time varying" characteristic, which both the location and the magnitude of the outlier channels varies across timesteps. Existing channel balance techniques struggle to handle such unique problem. 
+          </p>
+          <p>
+            We delve into the underlying reason for the time varying channel imbalance phenomenon, and discover that this imbalance could be decoupled into 2 parts. The "static" channel imbalance with the trained "time_shift_table", and the "dynamic" part introduce by time embedding. Enlightened by such finding, we propose to combine the merits of existing scheme, and design a "static-dynamic" channel balance technique. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="static/src/viditq/method/viditq_static_dynamic_channel_balance.jpg"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 100%"/>
+        </div>
+
+        <h3 class="title is-5">Metric Decoupled Mixed Precision</h3>
+        <div class="content has-text-justified">
+          <p>
+            For lower bit-width quantization, we discover that degradation is still witnessed for ViDiT-Q. We discover that the quantization is "bottlenecked" by some layer (unquantizing one layer improves from blank image to readable content).
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="static/src/viditq/method/motivation_mp.jpg"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 70%"/>
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            An intuitive solution for highly sensitive layers is assigning higher bit-width for them. We observe that simple Mean-Squared-Error(MSE)-based quantiation sensitivity measurement lacks precision. We introduce an improved metric-decoupled sensitivity analysis method that considers quantization's influence on multiple aspects. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="static/src/viditq/method/motivation_metric_decouple.jpg"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 70%"/>
+        </div>
+        <br/>
+                
+      </div>
+    </div>
+  <!--/ Motivation. -->
+  </div>
+</div>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3"> Experiments and Analysis  </h2>
+          <!-- Perf. -->
+          <h3 class="title is-4"> 🎬 Text2Video - Comprehensive Benchmark: VBench</h3>
+          <div class="content has-text-justified">
+            <p>
+              <a href="https://vchitect.github.io/VBench-project/">VBench</a> is a comprehensive benchmark suite for video generation. We evaluate the quantized model's generation quality from various perspective as follows. 
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/exps/viditq_vbench.png"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 90%"/>  
+          </div>
+          <p>
+            ViDiT-Q W8A8 quantization achieves comparable performance with the FP16. W4A8-MP quantiation only incurs notable performance decay, outtperforming the baseline W8A8 quantization. 
+          </p>
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/exps/radar_vbench.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 50%"/>  
+          </div>
+          <p>
+            We provide some qualitative video examples as follows:
+          </p>
+
+          <div class="video-container">
+            <!-- First video -->
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/sample_63_fp16.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>FP16</b></div>
+            </div>
+            
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/sample_63_vidit_q_w8a8.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>ViDiT-Q W8A8</b></div>
+            </div>
+          
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_63_baseline_w8a8.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>Baseline W8A8:</b> <br>"Ear Suddenly Appears"</div>
+            </div>
+          </div>
+          <div class="video-container">
+            <!-- First video -->
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_88_fp16.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>FP16</b></div>
+            </div>
+            
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_88_vidit_q_w8a8.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>ViDiT-Q W8A8</b></div>
+            </div>
+          
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_88_baseline_w8a8.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>Baseline W8A8:</b> <br>"Jitter and Color Shift"</div>
+            </div>
+          </div>
+          <div class="video-container">
+            <!-- First video -->
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_162_fp16.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>FP16</b></div>
+            </div>
+            
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_162_vidit_q_w8a8.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>ViDiT-Q W8A8</b></div>
+            </div>
+          
+            <div class="video" style="width: 33%;"> <!-- Adjusted width for four videos -->
+              <video autoplay controls muted loop playsinline>
+                <source src="./static/src/viditq/exps/videos_vbench/sample_162_baseline_w8a8.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="caption"><b>Baseline W8A8:</b> <br> "Content Changes"</div>
+            </div>
+          </div>
+      
+        </br>
+
+        <h3 class="title is-4"> 🎬 Text2Video & Class Condition generation on UCF-101 </h3>
+          <div class="content has-text-justified">
+            <p>
+              We apply ViDiT-Q to the open-sora and Latte models on UCF-101 datasets.  
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/exps/viditq_ucf101.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 90%"/>  
+          </div>
+
+          <h3 class="title is-4"> 🎬 Text2Video - Comparison of Quantization Methods</h3>
+          <div class="content has-text-justified">
+            <p>
+              We compare existing quantization techniques for open-sora model on its example prompts. 
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/exps/viditq_metrics.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 80%"/>  
+          </div>
+
+        </br>
+
+          <h3 class="title is-4"> 🖼️  Text2Image Generation on COCO Annotations </h3>
+          <div class="content has-text-justified">
+            <p>
+              We apply ViDiT-Q to the PixArt-&alpha; and PixArt-&Sigma; models on the COCO annotations.  
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/src/viditq/exps/viditq_coco.jpg"
+            class="exp-image"
+            alt="Experimental Results Image."
+            style="width: 100%"/>  
+          </div>
+
+        <!--/ AttnMap. -->
+        <h3 class="title is-4">Ablation Studies</h3>
+        <div class="content has-text-justified">
+          <p>
+            We conduct ablation studies for open-sora text-to-video generation for W4A8 quantization.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="static/src/viditq/method/viditq_ablation.jpg"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 100%"/>
+        </div>
+
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{zhao2024viditq,
+      title={ViDiT-Q: Efficient and Accurate Quantization of Diffusion Transformers for Image and Video Generation}, 
+      author={Tianchen Zhao and Tongcheng Fang and Enshu Liu and Wan Rui and Widyadewi Soedarmadji and Shiyao Li and Zinan Lin and Guohao Dai and Shengen Yan and Huazhong Yang and Xuefei Ning and Yu Wang},
+      year={2024},
+      eprint={2406.02540},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+    }</code></pre>
+  </div>
+
+  <!-- <div class="content has-text-centered">
+    <img src="./static/src/pr.png"
+    class="geo-vis"
+    alt="Attention map visualization."/>
+  </div> -->
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <!-- <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://arxiv.org/abs/2307.08209">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/A-suozhang/ada3d" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div> -->
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
