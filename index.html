@@ -99,7 +99,7 @@
 
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>Tsinghua University,</span>
-            <span class="author-block"><sup>2</sup>Bytedance</span>
+            <span class="author-block"><sup>2</sup>Bytedance Seed</span>
           </div>
 
           <div class="is-size-6 publication-authors">
@@ -111,7 +111,7 @@
 
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2F429cbac0-9463-4978-941b-c3c8ef5daa01.pdf"
+                <a href="https://arxiv.org/pdf/2506.16054"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -120,7 +120,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2406.02540"
+                <a href="https://arxiv.org/abs/2506.16054"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -140,12 +140,12 @@
               </span> -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/thu-nics/ViDiT-Q"
+                <a href="https://github.com/thu-nics"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
                   </span>
-                  <span>Code</span>
+                  <span>Code (Coming Soon)</span>
                   </a>
               </span>
 
@@ -190,7 +190,7 @@
           <div class="content has-text-justified">
             <ul style="list-style-type: none; padding-left: 0;">
               <li style="margin-bottom: 1rem;">
-                We propose <b>PAROAttention:</b> A simple yet effective approach to enhance the efficiency of attention in visual generative models. By taking an alternative approach of "reorganize" the attention pattern through <b>"Pattern-Aware token ReOrder"</b>, it improves both the attention sparsification and quantization, achieving superior performance preservation and hardware efficiency. PAROAttention achieves <b>20% density</b>, and <b>INT4 quantization</b> on mainstream video (CogVideo, Wan) and image generation (Flux) models, speedup attention computing by <b>3-10x</b> and <b>2-4x</b> end-to-end acceleration while maintaining generation quality.
+                We propose <b>PAROAttention:</b> A simple yet effective approach to enhance the efficiency of attention in visual generative models. By taking a novel alternative approach of "reorganize" the attention pattern through <b>"Pattern-Aware token ReOrder"</b>, it simultaneously improves both the attention **sparsification and quantization**, achieving superior performance preservation and hardware efficiency. PAROAttention achieves <b>20% density (5x sparse)</b>, and <b>INT4 quantization</b> of both QK and PV computing on mainstream video (CogVideo, Wan) and image generation (Flux) models, speedup attention computing by <b>3-10x</b> and <b>2-4x</b> end-to-end acceleration while maintaining generation quality.
               </li>
               <video autoplay controls muted loop playsinline style="width: 45%; margin: 2rem auto 1rem auto; display: block;">
                 <source src="./static/src/paroattn/paro_reorder.mp4" type="video/mp4">
